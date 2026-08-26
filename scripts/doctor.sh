@@ -71,11 +71,23 @@ else
   fail "required directories exist (missing: ${missing_dirs[*]})"
 fi
 
-for asset_dir in assets/brand assets/music; do
-  if [[ -z "$(find "$asset_dir" -mindepth 1 ! -name '.gitkeep' -print -quit 2>/dev/null)" ]]; then
-    printf 'WARN: %s is empty\n' "$asset_dir"
-  fi
+required_scripts=(
+  scripts/new-video.ts scripts/approve.ts scripts/render-plan.ts scripts/mix.sh
+)
+missing_scripts=()
+for script in "${required_scripts[@]}"; do
+  [[ -f "$script" ]] || missing_scripts+=("$script")
 done
+if (( ${#missing_scripts[@]} == 0 )); then
+  pass 'pipeline scripts exist'
+else
+  fail "pipeline scripts exist (missing: ${missing_scripts[*]})"
+fi
+if [[ -z "$(find assets/music -mindepth 1 ! -name '.gitkeep' -print -quit 2>/dev/null)" ]]; then
+  printf 'WARN: assets/music is empty; final renders will stay silent\n'
+else
+  pass 'assets/music contains media'
+fi
 
 printf '%d checks run, %d failed\n' "$checks_run" "$failed"
 
