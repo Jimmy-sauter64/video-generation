@@ -54,8 +54,10 @@ import { Circle, Path, Rect, Gradient, type Node } from "@revideo/2d";
 import {
   createSignal,
   easeOutExpo,
+  easeOutQuad,
   linear,
   waitFor,
+  all,
   type SimpleSignal,
   type ThreadGenerator,
 } from "@revideo/core";
@@ -87,12 +89,15 @@ const HERO_BASELINE = 0.72;
  */
 const INK_CEILING = 0.3;
 
-/** Seconds a plate's parts take to fade up, and the gap between them. */
-const ENTER_SEC = 0.45;
-const ENTER_STAGGER_SEC = 0.1;
+/** Seconds a plate's parts take to enter, and the gap between them. */
+const ENTER_SEC = 0.35;
+const ENTER_STAGGER_SEC = 0.08;
+
+/** Scale the hero pops in from (1.0 = no scale entrance). */
+const ENTER_HERO_SCALE = 1.12;
 
 /** Dashed-route travel, in px per second of scene time. */
-const DASH_TRAVEL_PX_PER_SEC = 7;
+const DASH_TRAVEL_PX_PER_SEC = 12;
 
 /* ------------------------------------------------------------ determinism */
 
@@ -369,15 +374,16 @@ function Motif(
     }
 
     case "boat": {
-      // Four fills, no strokes: hull, sail, mast, and (hero only) nothing else.
-      const hullWidth = site.width * (hero ? 0.3 : 0.16);
-      const hullHeight = site.height * (hero ? 0.13 : 0.07);
-      const sailWidth = site.width * (hero ? 0.1 : 0.055);
-      const sailHeight = site.height * (hero ? 0.2 : 0.11);
+      // Five fills, no strokes: hull, sail, mast — the exemplar's flat-vector
+      // rounded-hull sailboat. One hull, one mast, one sail: clean, confident.
+      const hullWidth = site.width * (hero ? 0.50 : 0.28);
+      const hullHeight = site.height * (hero ? 0.15 : 0.08);
+      const sailWidth = site.width * (hero ? 0.18 : 0.09);
+      const sailHeight = site.height * (hero ? 0.28 : 0.14);
       const baseline = hero ? HERO_BASELINE : 0.68;
-      const deck = baseline - (hero ? 0.13 : 0.07);
-      const centreX = (hero ? site.x(0.44) : site.x(0.24)) + nudgeX;
-      const mastX = centreX + site.width * 0.01;
+      const deck = baseline - (hero ? 0.15 : 0.08);
+      const centreX = (hero ? site.x(0.42) : site.x(0.26)) + nudgeX;
+      const mastX = centreX + hullWidth * 0.35;
       const mastHeight = sailHeight + site.height * 0.03;
       const bob = drift(site, 0, 3, 6.5, phase);
 
@@ -391,7 +397,7 @@ function Motif(
       );
       group.add(
         <Rect
-          width={Math.max(3, Math.round(site.width * 0.006))}
+          width={Math.max(3, Math.round(site.width * 0.007))}
           height={mastHeight}
           x={mastX}
           y={() => site.y(deck) + site.height * 0.01 - mastHeight / 2 + bob()}
@@ -412,9 +418,7 @@ function Motif(
     case "compass": {
       // Hero: a legible rose standing on the ground line at the top of §3's
       // 26–38% band. Motif: a small watermark rose sunk into the water at the
-      // right, sized to sit *entirely inside* the band — the first draft used a
-      // 55%-tall watermark clipped by the plate edge, which read as a stray
-      // spike rather than a compass.
+      // right. The outer rings rotate slowly (Google Cloud motion graphics style).
       const diameter = site.height * (hero ? 0.38 : 0.3);
       const centreX = (hero ? site.x(0.48) : site.x(0.855)) + nudgeX;
       const centreY =
@@ -422,6 +426,10 @@ function Motif(
       const alpha = hero ? 1 : 0.36;
       const glide = drift(site, centreX, hero ? 2 : 4, hero ? 12 : 13, phase);
 
+      // Slow rotation: one full turn over the scene duration
+      const rotation = () => (site.clock() / (hero ? 28 : 35)) * 360;
+
+      // Outer ring rotates (the navigational ring)
       group.add(
         <Circle
           width={diameter}
@@ -430,6 +438,7 @@ function Motif(
           y={centreY}
           stroke={ink(MOTIF_INKS[kind].ring, 0.95 * alpha)}
           lineWidth={Math.max(2, Math.round(diameter * 0.026))}
+          rotation={rotation}
         />,
       );
       group.add(
@@ -440,6 +449,8 @@ function Motif(
           y={centreY}
           stroke={ink(MOTIF_INKS[kind].ring, 0.7 * alpha)}
           lineWidth={Math.max(2, Math.round(diameter * 0.018))}
+          // Inner ring counter-rotates for visual interest
+          rotation={() => -((site.clock() / (hero ? 22 : 30)) * 360)}
         />,
       );
       group.add(
@@ -499,6 +510,8 @@ export function Plate(props: PlateProps): PlateHandle {
   }
   const heroNode = Motif(site, hero, true, MAX_MOTIFS + 1) as Rect;
   node.add(heroNode);
+  // Initial scale for the pop-in entrance: start slightly larger, then animate to 1
+  heroNode.scale(ENTER_HERO_SCALE);
   const entrances: Rect[] = [heroNode, ...motifNodes];
 
   return {
@@ -507,8 +520,17 @@ export function Plate(props: PlateProps): PlateHandle {
       yield* clock(durationSec, durationSec, linear);
     },
     *enter(): ThreadGenerator {
-      for (const group of entrances) {
-        yield group.opacity(1, ENTER_SEC, easeOutExpo);
+      // Hero pops in with scale + opacity (Google Cloud motion graphics style).
+      // Then supporting motifs fade in behind it.
+      if (entrances.length > 0) {
+        yield all(
+          entrances[0].opacity(1, ENTER_SEC, easeOutExpo),
+          entrances[0].scale(1, ENTER_SEC, easeOutExpo),
+        );
+        yield* waitFor(ENTER_STAGGER_SEC);
+      }
+      for (let index = 1; index < entrances.length; index += 1) {
+        yield entrances[index].opacity(1, ENTER_SEC, easeOutExpo);
         yield* waitFor(ENTER_STAGGER_SEC);
       }
       yield* waitFor(ENTER_SEC);

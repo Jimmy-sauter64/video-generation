@@ -55,7 +55,7 @@
  * into the post-copy stub.
  */
 
-import { Img, Rect, type Node } from "@revideo/2d";
+import { Gradient, Img, Rect, type Node } from "@revideo/2d";
 import {
   all,
   easeInExpo,
@@ -72,7 +72,6 @@ import type { KenBurnsStoryScene } from "../schemas/plan";
 import { plateParamsFor } from "./plateLibrary";
 import {
   Beat,
-  DriftingGround,
   LogoEndCard,
   fitBeatsToBudget,
   frameFor,
@@ -86,29 +85,15 @@ import {
 
 /**
  * Cross-dissolve between two stills, seconds.
- *
- * The outgoing still's zoom is extended by exactly this much so it is still
- * moving underneath while the incoming still rises — in the previous draft the
- * pan/zoom tween ended *at* the boundary and the frame sat frozen for the whole
- * 0.6s dissolve, which is the "motion stops dead" tell.
  */
 const STILL_CROSSFADE_SEC = 0.6;
 
-/** Aspect of the `-plate.png` crops (1440 x 800). */
-const PLATE_ASPECT = 1440 / 800;
-
 /**
- * Top edge of the plate as a fraction of frame height.
- *
- * Sits below the deepest four-line headline block (which bottoms out at 29% of
- * height on 4:5) and leaves ≥ 21% of the frame clear underneath, so the plate
- * reads as an inset object with margins rather than a band welded to the bottom
- * edge.
+ * Plate fills the full frame (Stripe-style) so the illustration IS the page.
+ * The plate's own ground (tint/wave/gradient) becomes the scene background,
+ * and white headline beats sit on a dark gradient overlay for contrast.
  */
-const PLATE_TOP_OF_HEIGHT = 0.475;
-
-/** Corner radius as a fraction of frame width. */
-const PLATE_RADIUS_OF_WIDTH = 0.026;
+const PLATE_FULL_FRAME = true;
 
 /** Natural pixel dimensions of a still, probed by the render CLI. */
 export interface AssetSize {
@@ -138,19 +123,17 @@ interface PlateGeometry extends Box {
 }
 
 /**
- * The plate shares the type column's width and left edge, so the artwork and the
- * headline sit on one grid instead of two.
+ * Plate fills the full frame (Stripe-style) so the illustration IS the page.
+ * The plate's own ground (tint/wave/gradient) becomes the scene background,
+ * and white headline beats sit on a subtle gradient overlay for contrast.
  */
 function plateGeometry(frame: Frame): PlateGeometry {
-  const width = frame.textWidth;
-  const height = Math.round(width / PLATE_ASPECT);
-  const top = -frame.height / 2 + frame.height * PLATE_TOP_OF_HEIGHT;
   return {
-    x: frame.textCenterX,
-    y: top + height / 2,
-    width,
-    height,
-    radius: Math.round(frame.width * PLATE_RADIUS_OF_WIDTH),
+    x: 0,
+    y: 0,
+    width: frame.width,
+    height: frame.height,
+    radius: 0,
   };
 }
 
@@ -208,30 +191,47 @@ export function* kenBurnsStory({
   yield loadBrandFonts();
 
   const frame = frameFor(ratio);
-
-  // One continuous ground for the whole scene, identical to `hookStat`'s (L7).
-  // `yield`, not `yield*`, so its clock runs for the scene's full duration
-  // alongside everything below and never restarts at a beat boundary.
-  const ground = DriftingGround(frame);
-  view.add(ground.node);
-  yield ground.run(scene.durationSec);
-
   const geometry = plateGeometry(frame);
+
+  // Full-frame plate: the coded illustration IS the page (Stripe/AWS-style).
+  // No separate DriftingGround — the plate's own ground (tint/wave/gradient)
+  // acts as the scene background.
   const plate = (
     <Rect
-      x={geometry.x}
-      y={geometry.y}
-      width={geometry.width}
-      height={geometry.height}
-      radius={geometry.radius}
-      // The crops are light lavender; backing the plate in `tint` means a
-      // sub-pixel edge during a zoom shows plate colour, not the ground.
+      x={0}
+      y={0}
+      width={frame.width}
+      height={frame.height}
       fill={palette.tint}
       opacity={0}
-      clip
     />
   ) as Rect;
   view.add(plate);
+
+  // Subtle gradient overlay from deep purple (top) → transparent (middle)
+  // so white headline beats have contrast against the plate's light tint ground.
+  const scrim = (
+    <Rect
+      x={0}
+      y={0}
+      width={frame.width}
+      height={frame.height}
+      opacity={0}
+      fill={
+        new Gradient({
+          type: "linear",
+          from: [0, -frame.height / 2],
+          to: [0, frame.height / 2],
+          stops: [
+            { offset: 0, color: `rgba(30, 5, 63, 1)` },
+            { offset: 0.35, color: `rgba(30, 5, 63, 0.6)` },
+            { offset: 0.55, color: `rgba(30, 5, 63, 0)` },
+          ],
+        })
+      }
+    />
+  ) as Rect;
+  view.add(scrim);
 
   const isLast = Boolean(endCardCta);
   const budget = Math.max(
@@ -315,31 +315,32 @@ export function* kenBurnsStory({
     }
   }
 
-  // Stills and beats are two independent tracks over the same budget, and both
-  // ride on the one ground.
+  // Stills cross-dissolve in the background while drift clocks run, then the
+  // plate reveals with the scrim so the illustration is full-frame when beats begin.
   yield stillSequence();
-  yield plate.opacity(1, motion.fadeInSec, easeOutExpo);
+  yield all(
+    plate.opacity(1, motion.fadeInSec, easeOutExpo),
+    scrim.opacity(1, motion.fadeInSec, easeOutExpo),
+  );
 
+  // Beat positioning: top-anchored since the full-bleed plate fills the frame.
+  // The scrim overlay provides contrast for white text against tint backgrounds.
   const beats = fitBeatsToBudget(beatsFor(scene), budget).map((beat) => {
-    // Top-anchored, not band-centred: the plate owns the lower half, so a
-    // four-line beat centred in the content band would run into its top edge.
     const node = Beat(frame, beat.content, { anchorY: frame.contentTop });
     view.add(node);
     return { node, durationSec: beat.durationSec };
   });
 
-  yield* runBeats(beats, {
-    onBeatStart: (index, durationSec) =>
-      ground.rehue(index, Math.min(motion.fadeInSec, durationSec)),
-  });
+  yield* runBeats(beats);
 
   if (isLast) {
     const endCard = LogoEndCard(frame);
     view.add(endCard);
-    // The plate clears as the logo arrives, so the card closes on the ground
-    // alone exactly as `hookStat` does (L9) — and because `runBeats` left the
-    // final headline still fading, all three moves overlap in one dissolve.
-    yield plate.opacity(0, motion.fadeOutSec, easeInExpo);
+    // The plate and scrim clear together as the logo arrives.
+    yield all(
+      plate.opacity(0, motion.fadeOutSec, easeInExpo),
+      scrim.opacity(0, motion.fadeOutSec, easeInExpo),
+    );
     yield* runEndCard(endCard);
   }
 }
