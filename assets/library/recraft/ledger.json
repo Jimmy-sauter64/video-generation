@@ -1,0 +1,72 @@
+[
+  {
+    "timestamp": "2026-08-26T17:45:05.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "rounded-hull-sailboat",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/rounded-hull-sailboat.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:45:23.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "compass-rose",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/compass-rose.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:45:42.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "dashed-route-four-point-star",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/dashed-route-four-point-star.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:46:01.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "coin-growth-motif",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/coin-growth-motif.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:46:20.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "handshake-partner-motif",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/handshake-partner-motif.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:46:41.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "staircase",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/staircase.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:47:00.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "bridge",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/bridge.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:47:18.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "lighthouse",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/lighthouse.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:47:35.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "key",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/key.svg"
+  },
+  {
+    "timestamp": "2026-08-26T17:47:55.000Z",
+    "model": "recraft/recraft-v4-styles-vector",
+    "prompt-slug": "signpost",
+    "cost": 0.055,
+    "output-file": "assets/library/recraft/signpost.svg"
+  }
+]

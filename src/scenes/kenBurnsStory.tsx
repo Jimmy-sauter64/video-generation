@@ -36,6 +36,19 @@
  * *inside the plate*, so a value of ±1 lands exactly on the image edge and can
  * never expose the plate's backing.
  *
+ * **Coded plates.** A still may instead be *drawn* rather than photographed. Any
+ * still whose `src` ends in `.plate` — by convention
+ * `assets/library/plate-<id>.plate` — is rendered by `src/components/Plate.tsx`
+ * from the parameters in `src/scenes/plateLibrary.ts`, which is also where the
+ * convention is documented and why it is spelled as a file path (the plan schema
+ * in `src/schemas/plan.ts` is contract code and only accepts relative
+ * `assets/`/`videos/` paths, so a `plate:` marker could never validate). A coded
+ * plate ignores the still's `panFrom`/`panTo`/`zoomFrom`/`zoomTo`: a flat vector
+ * plate has no grain or detail to reveal, so a Ken Burns move on one is just
+ * scaling clean edges. Its motion is internal instead — a travelling dash
+ * offset and a few pixels of drift on each motif — which keeps the frame alive
+ * through a hold without touching the plate's geometry.
+ *
  * The plan's per-still `caption` is deliberately **not** drawn. L10 allows one
  * message on screen at a time, and the beat track already supplies it; the still
  * captions remain plan metadata and are what `scripts/render-plan.ts` writes
@@ -52,9 +65,11 @@ import {
   type ThreadGenerator,
 } from "@revideo/core";
 
+import { Plate } from "../components/Plate";
 import { motion, palette } from "../brand/tokens";
 import type { KenBurnsStoryScene } from "../schemas/plan";
 
+import { plateParamsFor } from "./plateLibrary";
 import {
   Beat,
   DriftingGround,
@@ -229,41 +244,62 @@ export function* kenBurnsStory({
     let previous: Rect | undefined;
 
     for (const [index, still] of scene.stills.entries()) {
-      const natural = assetSizes[still.src] ?? {
-        width: geometry.width,
-        height: geometry.height,
-      };
-
-      const from = coverGeometry(geometry, natural, still.zoomFrom);
-      const to = coverGeometry(geometry, natural, still.zoomTo);
-
-      const img = (
-        <Img
-          src={still.src}
-          width={from.width}
-          height={from.height}
-          x={panOffset(from.overflowX, still.panFrom.x)}
-          y={panOffset(from.overflowY, still.panFrom.y)}
-          smoothing
-        />
-      ) as Img;
-
-      const holder = (<Rect opacity={index === 0 ? 1 : 0}>{img}</Rect>) as Rect;
+      const holder = (<Rect opacity={index === 0 ? 1 : 0} />) as Rect;
       plate.add(holder);
 
-      // The zoom runs `STILL_CROSSFADE_SEC` past the still's own slot, so it is
-      // still travelling underneath while the next still dissolves over it.
-      yield all(
-        img.size([to.width, to.height], perStill + STILL_CROSSFADE_SEC, linear),
-        img.position(
-          [
-            panOffset(to.overflowX, still.panTo.x),
-            panOffset(to.overflowY, still.panTo.y),
-          ],
-          perStill + STILL_CROSSFADE_SEC,
-          linear,
-        ),
-      );
+      const plateParams = plateParamsFor(still.src);
+
+      if (plateParams) {
+        const coded = Plate({
+          ...plateParams,
+          width: geometry.width,
+          height: geometry.height,
+        });
+        holder.add(coded.node);
+        // The drift clock is `yield`ed so it keeps ticking for the rest of the
+        // scene rather than blocking the slot, and the motifs fade up on the
+        // same frames the holder dissolves in.
+        yield coded.run(scene.durationSec);
+        yield coded.enter();
+      } else {
+        const natural = assetSizes[still.src] ?? {
+          width: geometry.width,
+          height: geometry.height,
+        };
+
+        const from = coverGeometry(geometry, natural, still.zoomFrom);
+        const to = coverGeometry(geometry, natural, still.zoomTo);
+
+        const img = (
+          <Img
+            src={still.src}
+            width={from.width}
+            height={from.height}
+            x={panOffset(from.overflowX, still.panFrom.x)}
+            y={panOffset(from.overflowY, still.panFrom.y)}
+            smoothing
+          />
+        ) as Img;
+        holder.add(img);
+
+        // The zoom runs `STILL_CROSSFADE_SEC` past the still's own slot, so it
+        // is still travelling underneath while the next still dissolves over it.
+        yield all(
+          img.size(
+            [to.width, to.height],
+            perStill + STILL_CROSSFADE_SEC,
+            linear,
+          ),
+          img.position(
+            [
+              panOffset(to.overflowX, still.panTo.x),
+              panOffset(to.overflowY, still.panTo.y),
+            ],
+            perStill + STILL_CROSSFADE_SEC,
+            linear,
+          ),
+        );
+      }
 
       if (index > 0) {
         yield* holder.opacity(1, STILL_CROSSFADE_SEC, easeOutExpo);
