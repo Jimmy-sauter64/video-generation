@@ -54,9 +54,16 @@ Chosen over Public Sans and Inter because:
   everywhere) and slightly narrow-shouldered at large display weights
   compared to Instrument Sans's more assertive display presence.
 
-Only weights 500 and 700 were available/vendored (the family does not ship
-800/900 weights). Use 700 for hooks/headlines and 500 for supporting text;
-do not synthesize a fake bold via CSS `font-weight` beyond what's vendored.
+All four published weights are vendored — 400/500/600/700 (the family does not
+ship 800/900). Use **600 for headline beats and stat values, 500 for support
+lines and eyebrows**, per `typeWeights` in `tokens.ts`. Do not synthesize a fake
+bold via CSS `font-weight` beyond what is vendored.
+
+**700 is vendored but must not be used for on-screen video type.**
+`docs/style/exemplar-analysis.md` L3 measured every headline across the four
+reference videos at 500–600 and never above; 700 is the single loudest
+contributor to our old templates reading "denser than the bar". (This paragraph
+replaced a "use 700 for hooks/headlines" instruction on 2026-08-26.)
 
 Swapping to real Halyard later is a one-line change in `tokens.ts`: replace
 the `fonts.display` object with Halyard's family name and file paths — every
@@ -74,6 +81,14 @@ consumer reads through `fonts.display`, nothing else needs to change.
   worth prioritizing over the "purple dominant" rule above.
 
 ## Caption styling defaults
+
+> **Superseded 2026-08-26.** There is no caption track any more. Per
+> `docs/style/exemplar-analysis.md` L10, none of the four reference videos burns
+> in subtitles or a lower-third band; a plan's `captions` array is now rendered
+> as **held headline beats** in the optical middle (`Beat`/`runBeat` in
+> `src/scenes/sceneKit.tsx`), not as a chip. The rules below are kept as a
+> record of the retired treatment and describe `src/components/Captions.tsx`,
+> which is deprecated and unused.
 
 - **Bold** — always use `fonts.display` weight 700, never a thin/regular
   weight for captions.

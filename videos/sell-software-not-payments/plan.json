@@ -10,32 +10,27 @@
       "durationSec": 18,
       "captions": [
         {
-          "text": "Payments look like a feature until you own the risk.",
-          "startSec": 0,
-          "endSec": 3.5
+          "text": "Payments look like a feature.",
+          "startSec": 3.5,
+          "endSec": 7
         },
         {
-          "text": "Then compliance becomes your hiring plan.",
-          "startSec": 3.9,
-          "endSec": 6.4
+          "text": "Until you own the risk.",
+          "startSec": 7,
+          "endSec": 10.5
         },
         {
-          "text": "We take on the underwriting, the risk, and the rails.",
-          "startSec": 6.8,
-          "endSec": 10.7
-        },
-        {
-          "text": "You keep shipping.",
-          "startSec": 11.1,
-          "endSec": 12.6
+          "text": "We take the risk. You keep shipping.",
+          "startSec": 10.5,
+          "endSec": 14
         }
       ],
-      "hook": "You Sell Software, Not Payments",
+      "hook": "You sell software, not payments",
       "stat": {
         "value": "PCI Level 1",
-        "label": "the security you inherit rather than build"
+        "label": "Security you inherit"
       },
-      "supportingLine": "Card, ACH, and cash on a dedicated payments environment. Not a shared rail."
+      "supportingLine": "Card, ACH, and cash on one dedicated environment."
     }
   ]
 }

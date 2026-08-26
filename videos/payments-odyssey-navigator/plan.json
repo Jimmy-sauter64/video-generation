@@ -10,36 +10,36 @@
       "durationSec": 21,
       "captions": [
         {
-          "text": "Every platform reaches the payments decision eventually.",
+          "text": "Every platform reaches the payments decision.",
           "startSec": 0,
-          "endSec": 3.4
+          "endSec": 3.6
         },
         {
-          "text": "Most crews don't learn the route until they run aground.",
-          "startSec": 3.8,
-          "endSec": 7.3
+          "text": "Most crews learn the route too late.",
+          "startSec": 3.6,
+          "endSec": 7.2
         },
         {
-          "text": "Underwriting, risk, and compliance are our charts.",
-          "startSec": 7.6,
+          "text": "Underwriting and risk are our charts.",
+          "startSec": 7.2,
           "endSec": 10.8
         },
         {
-          "text": "You keep your hands on the product you built.",
-          "startSec": 11.4,
-          "endSec": 14.6
+          "text": "You keep your hands on the product.",
+          "startSec": 10.8,
+          "endSec": 14.4
         },
         {
           "text": "We take the helm on payments.",
-          "startSec": 15,
+          "startSec": 14.4,
           "endSec": 18
         }
       ],
       "stills": [
         {
           "src": "assets/library/paytheory-odyssey-ship-portrait.png",
-          "panFrom": { "x": 0.45, "y": 0.7 },
-          "panTo": { "x": 0.5, "y": 0.68 },
+          "panFrom": { "x": 0.45, "y": 0.28 },
+          "panTo": { "x": 0.5, "y": 0.34 },
           "zoomFrom": 3.3,
           "zoomTo": 3.6,
           "caption": "The voyage starts before you pick a processor."

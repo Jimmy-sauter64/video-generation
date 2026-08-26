@@ -1,3 +1,18 @@
+/**
+ * @deprecated Not used by any scene as of the 2026-08-26 exemplar rebuild.
+ *
+ * `docs/style/exemplar-analysis.md` L10: none of the four reference videos
+ * burns in a caption track, a lower-third band, or word-by-word captions. The
+ * message now lives in held headline beats set in the optical middle — see
+ * `Beat`/`runBeat` in `src/scenes/sceneKit.tsx`. A plan's `captions` array is
+ * still the source of that message; the scenes read it and render each cue as a
+ * full-size headline instead of a chip.
+ *
+ * Kept as a file (not deleted) because `src/schemas/plan.ts` is contract code
+ * and still validates the caption track. Do not reintroduce this component into
+ * a scene without re-opening the style spec.
+ */
+
 import { Rect, Txt, type Node } from "@revideo/2d";
 import { type ThreadGenerator, waitFor } from "@revideo/core";
 

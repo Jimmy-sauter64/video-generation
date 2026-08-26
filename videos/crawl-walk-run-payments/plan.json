@@ -10,37 +10,27 @@
       "durationSec": 18,
       "captions": [
         {
-          "text": "Most platforms launch payments all at once.",
-          "startSec": 0,
-          "endSec": 3.2
-        },
-        {
-          "text": "One integration, one migration, one long quarter of no features.",
-          "startSec": 3.6,
+          "text": "Most platforms launch payments at once.",
+          "startSec": 3.5,
           "endSec": 7
         },
         {
+          "text": "One integration. One long quarter.",
+          "startSec": 7,
+          "endSec": 10.5
+        },
+        {
           "text": "Payments can arrive in stages.",
-          "startSec": 7.4,
-          "endSec": 9.4
-        },
-        {
-          "text": "Ship the piece your customers actually need next.",
-          "startSec": 9.8,
-          "endSec": 12.6
-        },
-        {
-          "text": "The rest waits.",
-          "startSec": 13,
-          "endSec": 14.5
+          "startSec": 10.5,
+          "endSec": 14
         }
       ],
-      "hook": "Payments Should Not Become Your Roadmap",
+      "hook": "Payments should not become your roadmap",
       "stat": {
         "value": "Crawl. Walk. Run.",
-        "label": "how partners grow into payments"
+        "label": "How partners grow"
       },
-      "supportingLine": "Add payments in stages, rather than in one launch. Embedded first. The rest when your customers ask."
+      "supportingLine": "Ship what your customers need next."
     }
   ]
 }
