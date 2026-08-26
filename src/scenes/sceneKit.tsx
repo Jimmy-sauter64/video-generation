@@ -5,7 +5,7 @@
  * `docs/style/exemplar-analysis.md`. Every helper here exists to make one of
  * those laws hard to break from a template:
  *
- * - **L1** — `runBeat` only ever tweens `opacity`. There is no transform,
+ * - **L1** — `runBeats` only ever tweens `opacity`. There is no transform,
  *   spring, or per-word entrance anywhere in this file.
  * - **L2/L4** — `fitHeadline` wraps to at most 4 balanced lines and shrinks the
  *   type rather than letting a line run long.
@@ -34,8 +34,8 @@ import {
 } from "@revideo/2d";
 import {
   createSignal,
-  easeInExpo,
   easeOutExpo,
+  easeOutQuad,
   linear,
   waitFor,
   type SimpleSignal,
@@ -510,11 +510,26 @@ export function beatAnchorY(frame: Frame): number {
   return frame.contentTop + Math.max(0, (bandHeight - nominalBlock) / 2);
 }
 
+export interface BeatOptions {
+  /**
+   * Top edge of the type block, centre-origin. Defaults to `beatAnchorY`.
+   *
+   * `kenBurnsStory` overrides this to `frame.contentTop` because it parks a
+   * contained still plate in the lower half of the frame; a block centred in the
+   * content band would collide with the plate's top edge on a four-line beat.
+   */
+  readonly anchorY?: number;
+}
+
 /**
  * Build one beat as a hidden node. Add it to the view, then play it with
- * `runBeat`.
+ * `runBeats`.
  */
-export function Beat(frame: Frame, content: BeatContent): Rect {
+export function Beat(
+  frame: Frame,
+  content: BeatContent,
+  options: BeatOptions = {},
+): Rect {
   const headline = fitText(content.headline, {
     base: frame.headlineSize,
     min: frame.headlineMinSize,
@@ -588,7 +603,7 @@ export function Beat(frame: Frame, content: BeatContent): Rect {
   return (
     <Rect
       x={frame.textCenterX}
-      y={beatAnchorY(frame)}
+      y={options.anchorY ?? beatAnchorY(frame)}
       offset={[0, -1]}
       width={frame.textWidth}
       layout
@@ -603,20 +618,96 @@ export function Beat(frame: Frame, content: BeatContent): Rect {
   ) as Rect;
 }
 
+/* --------------------------------------------------------- beat sequencing */
+
 /**
- * Hold one beat: fade in, hold, fade out, remove.
+ * How far *before* its slot ends an outgoing beat starts fading.
  *
- * Opacity is the only property touched (L1). `easeOutExpo` and `easeInExpo` are
- * exactly the measured curves `cubic-bezier(0.16, 1, 0.3, 1)` and
- * `cubic-bezier(0.7, 0, 0.84, 0)`.
+ * Measured on the previous draft: `runBeat` completed a beat's fade-out and only
+ * then began the next beat's fade-in, which left frame 216 of the odyssey draft
+ * (t = 7.20s, a beat boundary) carrying no type at all — and every other
+ * boundary the same. One empty frame is enough to read as a slide change rather
+ * than a dissolve. Starting the exit 0.30s early makes the two beats genuinely
+ * overlap instead of merely abutting.
  */
-export function* runBeat(node: Rect, durationSec: number): ThreadGenerator {
-  const fadeIn = Math.min(motion.fadeInSec, durationSec * 0.25);
-  const fadeOut = Math.min(motion.fadeOutSec, durationSec * 0.15);
-  yield* node.opacity(1, fadeIn, easeOutExpo);
-  yield* waitFor(Math.max(0, durationSec - fadeIn - fadeOut));
-  yield* node.opacity(0, fadeOut, easeInExpo);
+const BEAT_CROSS_LEAD_SEC = 0.28;
+
+/**
+ * Cross-dissolve length for a beat handing over to the next one, eased
+ * `easeOutQuad` so the exit is fastest at the start.
+ *
+ * The curve is doing something specific, and both failure modes were rendered
+ * before landing on it. An `easeInExpo` exit (the old `runBeat`) holds ~94%
+ * opacity for most of its run and then drops off a cliff — that is what produced
+ * the empty boundary frame. An `easeInSine` exit is still at 59% when the next
+ * beat arrives, which renders as two fully legible headlines stacked on top of
+ * each other.
+ *
+ * `easeOutQuad` over 0.55s starting `BEAT_CROSS_LEAD_SEC` early threads between
+ * them: the outgoing beat is at 24% on the boundary frame and 9% a tenth of a
+ * second later, while the incoming beat's `easeOutExpo` entrance is at 28% one
+ * frame after the boundary and 63% a tenth of a second in. Combined ink never
+ * falls below ~0.24 (so no frame is blank) and the two beats are never both
+ * above ~0.3 (so neither is ever readable over the other).
+ *
+ * The final beat uses the same exit: it hands over to the logo end card, which
+ * is a dissolve for the same reason.
+ */
+const BEAT_CROSS_OUT_SEC = 0.55;
+
+/** One built beat node paired with the slot it owns. */
+export interface PlayableBeat {
+  readonly node: Rect;
+  readonly durationSec: number;
+}
+
+export interface RunBeatsOptions {
+  /**
+   * Fired at each beat's first frame and `yield`ed, not `yield*`ed, so whatever
+   * it drives (the ground re-hue) runs alongside the beat instead of delaying
+   * it.
+   */
+  readonly onBeatStart?: (
+    index: number,
+    durationSec: number,
+  ) => ThreadGenerator;
+}
+
+function* fadeAndRemove(node: Rect, seconds: number): ThreadGenerator {
+  yield* node.opacity(0, seconds, easeOutQuad);
   node.remove();
+}
+
+/**
+ * Play a list of beats as one continuous cross-dissolved run.
+ *
+ * Opacity is the only property touched (L1). Each iteration advances the thread
+ * by exactly `durationSec`, so the sequence still ends on the budget it was
+ * given — the overlap is bought by starting the *exit* early, never by
+ * shortening a beat.
+ *
+ * The last beat's fade-out is deliberately left running when this returns: the
+ * caller starts the logo end card immediately, so the logo comes up while the
+ * final headline is still going down (L9's payoff arrives as a dissolve too).
+ */
+export function* runBeats(
+  beats: readonly PlayableBeat[],
+  options: RunBeatsOptions = {},
+): ThreadGenerator {
+  for (const [index, beat] of beats.entries()) {
+    const { node, durationSec } = beat;
+    const fadeIn = Math.min(motion.fadeInSec, durationSec * 0.35);
+    const lead = Math.min(BEAT_CROSS_LEAD_SEC, durationSec * 0.2);
+    const fadeOut = Math.min(BEAT_CROSS_OUT_SEC, durationSec * 0.3);
+
+    if (options.onBeatStart) {
+      yield options.onBeatStart(index, durationSec);
+    }
+    yield node.opacity(1, fadeIn, easeOutExpo);
+    yield* waitFor(Math.max(0, durationSec - lead));
+    yield fadeAndRemove(node, fadeOut);
+    yield* waitFor(lead);
+  }
 }
 
 /* -------------------------------------------------------------- end card */

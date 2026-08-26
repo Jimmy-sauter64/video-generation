@@ -19,6 +19,23 @@ tsx scripts/render-plan.ts videos/<slug>/plan.json --final
 
 Codex implements infrastructure and pipeline code. Claude designs scenes and visual motion. A cross-lineage review gate is required: Claude reviews Codex infrastructure; Codex reviews Claude scene work. Human approval is the required gate between draft and final.
 
+## Render QA
+
+Scene and component code must be frame-reproducible: never use `Date.now()`,
+`Math.random()`, or `new Date()` without a fixed argument. Derive values from
+the validated plan, a seeded value, or the Revideo timeline instead.
+
+After drafting, run `tsx scripts/qa-frames.ts out/<slug>/draft-<ratio>.mp4`.
+It checks sampled hook/mid/end frames for undersized text and text-like pixels
+inside the 12% side margins; use repeated `--ignore-region x,y,width,height`
+flags for known logos or illustrations, then inspect the flagged frame yourself.
+
+Review the resulting contact sheet and confirm copy against `src/brand/brand.md`
+before `tsx scripts/approve.ts <slug>`; its reminder records that review step
+without replacing human judgment. For future style-law violations, append the
+rule and precedent to `docs/style/exemplar-analysis.md` using a stable `R-`
+number; never renumber existing entries.
+
 ## Local environment
 
 Run `bash scripts/doctor.sh` first on every new machine. Renders and `tsx` need the sandbox disabled: Revideo needs Chrome and a Vite server bind, while `tsx` needs its IPC pipe. Do not diagnose those failures as a TypeScript or plan problem until running outside the restricted sandbox.

@@ -37,27 +37,27 @@
       ],
       "stills": [
         {
-          "src": "assets/library/paytheory-odyssey-ship-portrait.png",
-          "panFrom": { "x": 0.45, "y": 0.28 },
-          "panTo": { "x": 0.5, "y": 0.34 },
-          "zoomFrom": 3.3,
-          "zoomTo": 3.6,
+          "src": "assets/library/paytheory-odyssey-ship-plate.png",
+          "panFrom": { "x": 0, "y": 0 },
+          "panTo": { "x": 0.6, "y": -0.4 },
+          "zoomFrom": 1.04,
+          "zoomTo": 1.16,
           "caption": "The voyage starts before you pick a processor."
         },
         {
-          "src": "assets/library/paytheory-odyssey-portrait.png",
-          "panFrom": { "x": 1, "y": 1 },
-          "panTo": { "x": 0.85, "y": 1 },
-          "zoomFrom": 3.2,
-          "zoomTo": 2.8,
+          "src": "assets/library/paytheory-odyssey-plate.png",
+          "panFrom": { "x": -0.5, "y": 0.3 },
+          "panTo": { "x": 0, "y": 0 },
+          "zoomFrom": 1.16,
+          "zoomTo": 1.04,
           "caption": "A compass beats a map that someone else drew."
         },
         {
-          "src": "assets/library/paytheory-odyssey-v2-portrait.png",
-          "panFrom": { "x": 0.43, "y": 0.66 },
-          "panTo": { "x": 0.55, "y": 0.8 },
-          "zoomFrom": 3.3,
-          "zoomTo": 3,
+          "src": "assets/library/paytheory-odyssey-v2-plate.png",
+          "panFrom": { "x": 0, "y": 0 },
+          "panTo": { "x": -0.5, "y": 0.3 },
+          "zoomFrom": 1.04,
+          "zoomTo": 1.16,
           "caption": "You build the product. We navigate the payments."
         }
       ]

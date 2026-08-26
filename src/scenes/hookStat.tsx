@@ -30,7 +30,7 @@ import {
   fitBeatsToBudget,
   frameFor,
   loadBrandFonts,
-  runBeat,
+  runBeats,
   runEndCard,
   type Ratio,
   type TimedBeat,
@@ -104,16 +104,21 @@ export function* hookStat({
     1,
     scene.durationSec - (isLast ? motion.endCardSec : 0),
   );
-  const beats = fitBeatsToBudget(beatsFor(scene), budget);
-
-  for (const [index, beat] of beats.entries()) {
+  const beats = fitBeatsToBudget(beatsFor(scene), budget).map((beat) => {
     const node = Beat(frame, beat.content);
     view.add(node);
+    return { node, durationSec: beat.durationSec };
+  });
+
+  // `runBeats` cross-dissolves consecutive beats and leaves the final beat's
+  // fade-out running when it returns, so the end card below comes up while the
+  // last headline is still going down.
+  yield* runBeats(beats, {
     // Re-hue the ground across the beat's fade-in so the ground changes with
     // the text rather than on its own schedule (L7).
-    yield ground.rehue(index, Math.min(motion.fadeInSec, beat.durationSec));
-    yield* runBeat(node, beat.durationSec);
-  }
+    onBeatStart: (index, durationSec) =>
+      ground.rehue(index, Math.min(motion.fadeInSec, durationSec)),
+  });
 
   if (isLast) {
     const endCard = LogoEndCard(frame);
