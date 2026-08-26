@@ -1,112 +1,82 @@
 [
   {
     "file": "bridge.svg",
-    "offPaletteFound": 16,
-    "offPaletteFixed": 16,
+    "offPaletteFound": 2,
+    "offPaletteFixed": 2,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 27
+    "originalPaths": 15,
+    "finalPaths": 15
   },
   {
     "file": "coin-growth-motif.svg",
-    "offPaletteFound": 1,
-    "offPaletteFixed": 1,
+    "offPaletteFound": 2,
+    "offPaletteFixed": 2,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 15
+    "originalPaths": 12,
+    "finalPaths": 12
   },
   {
     "file": "compass-rose.svg",
     "offPaletteFound": 0,
     "offPaletteFixed": 0,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 38
+    "originalPaths": 22,
+    "finalPaths": 22
   },
   {
     "file": "dashed-route-four-point-star.svg",
-    "offPaletteFound": 0,
-    "offPaletteFixed": 0,
-    "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 48
-  },
-  {
-    "file": "handshake-partner-motif.svg",
     "offPaletteFound": 1,
     "offPaletteFixed": 1,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 1,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 16
+    "originalPaths": 14,
+    "finalPaths": 14
+  },
+  {
+    "file": "handshake-partner-motif.svg",
+    "offPaletteFound": 0,
+    "offPaletteFixed": 0,
+    "offPaletteRemaining": 0,
+    "originalPaths": 5,
+    "finalPaths": 5
   },
   {
     "file": "key.svg",
     "offPaletteFound": 0,
     "offPaletteFixed": 0,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 9
+    "originalPaths": 8,
+    "finalPaths": 8
   },
   {
     "file": "lighthouse.svg",
     "offPaletteFound": 0,
     "offPaletteFixed": 0,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 16
+    "originalPaths": 4,
+    "finalPaths": 4
   },
   {
     "file": "rounded-hull-sailboat.svg",
-    "offPaletteFound": 1,
-    "offPaletteFixed": 1,
+    "offPaletteFound": 2,
+    "offPaletteFixed": 2,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 1,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 7
+    "originalPaths": 16,
+    "finalPaths": 16
   },
   {
     "file": "signpost.svg",
-    "offPaletteFound": 1,
-    "offPaletteFixed": 1,
-    "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 12
-  },
-  {
-    "file": "staircase.svg",
     "offPaletteFound": 0,
     "offPaletteFixed": 0,
     "offPaletteRemaining": 0,
-    "gradientsStripped": 0,
-    "filtersStripped": 0,
-    "midOpacityStripped": 0,
-    "textElementsStripped": 0,
-    "pathCount": 16
+    "originalPaths": 11,
+    "finalPaths": 11
+  },
+  {
+    "file": "staircase.svg",
+    "offPaletteFound": 1,
+    "offPaletteFixed": 1,
+    "offPaletteRemaining": 0,
+    "originalPaths": 13,
+    "finalPaths": 13
   }
 ]
