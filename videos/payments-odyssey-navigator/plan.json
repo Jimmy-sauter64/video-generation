@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1",
+  "slug": "payments-odyssey-navigator",
+  "title": "Every payments odyssey needs a navigator",
+  "ratio": "4x5",
+  "totalDurationSec": 21,
+  "scenes": [
+    {
+      "kind": "kenBurnsStory",
+      "durationSec": 21,
+      "captions": [
+        {
+          "text": "Every platform reaches the payments decision eventually.",
+          "startSec": 0,
+          "endSec": 3.4
+        },
+        {
+          "text": "Most crews don't learn the route until they run aground.",
+          "startSec": 3.8,
+          "endSec": 7.3
+        },
+        {
+          "text": "Underwriting, risk, and compliance are our charts.",
+          "startSec": 7.6,
+          "endSec": 10.8
+        },
+        {
+          "text": "You keep your hands on the product you built.",
+          "startSec": 11.4,
+          "endSec": 14.6
+        },
+        {
+          "text": "We take the helm on payments.",
+          "startSec": 15,
+          "endSec": 18
+        }
+      ],
+      "stills": [
+        {
+          "src": "assets/library/paytheory-odyssey-ship-portrait.png",
+          "panFrom": { "x": 0.45, "y": 0.7 },
+          "panTo": { "x": 0.5, "y": 0.68 },
+          "zoomFrom": 3.3,
+          "zoomTo": 3.6,
+          "caption": "The voyage starts before you pick a processor."
+        },
+        {
+          "src": "assets/library/paytheory-odyssey-portrait.png",
+          "panFrom": { "x": 1, "y": 1 },
+          "panTo": { "x": 0.85, "y": 1 },
+          "zoomFrom": 3.2,
+          "zoomTo": 2.8,
+          "caption": "A compass beats a map that someone else drew."
+        },
+        {
+          "src": "assets/library/paytheory-odyssey-v2-portrait.png",
+          "panFrom": { "x": 0.43, "y": 0.66 },
+          "panTo": { "x": 0.55, "y": 0.8 },
+          "zoomFrom": 3.3,
+          "zoomTo": 3,
+          "caption": "You build the product. We navigate the payments."
+        }
+      ]
+    }
+  ]
+}

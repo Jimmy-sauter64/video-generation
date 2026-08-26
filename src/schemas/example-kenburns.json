@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1",
+  "slug": "payments-built-around-families",
+  "title": "Payments Built Around Families",
+  "ratio": "9x16",
+  "totalDurationSec": 18,
+  "scenes": [
+    {
+      "kind": "kenBurnsStory",
+      "durationSec": 18,
+      "captions": [
+        {
+          "text": "A family chooses the payment option that fits.",
+          "startSec": 0,
+          "endSec": 5
+        },
+        {
+          "text": "Your team sees one clear operational workflow.",
+          "startSec": 6,
+          "endSec": 11
+        },
+        {
+          "text": "Everyone gets a more human payment experience.",
+          "startSec": 12,
+          "endSec": 17
+        }
+      ],
+      "stills": [
+        {
+          "src": "assets/library/family-payment-choice.jpg",
+          "panFrom": {"x": -0.15, "y": 0},
+          "panTo": {"x": 0.12, "y": -0.05},
+          "zoomFrom": 1,
+          "zoomTo": 1.12,
+          "caption": "Flexible options meet families where they are."
+        },
+        {
+          "src": "assets/library/provider-operations.jpg",
+          "panFrom": {"x": 0.14, "y": 0.06},
+          "panTo": {"x": -0.1, "y": -0.04},
+          "zoomFrom": 1.04,
+          "zoomTo": 1.16,
+          "caption": "One workflow keeps payment operations clear."
+        },
+        {
+          "src": "assets/library/community-care-team.jpg",
+          "panFrom": {"x": -0.08, "y": -0.08},
+          "panTo": {"x": 0.1, "y": 0.04},
+          "zoomFrom": 1.02,
+          "zoomTo": 1.14,
+          "caption": "Better payments support stronger relationships."
+        }
+      ]
+    }
+  ]
+}

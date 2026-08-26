@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1",
+  "slug": "sell-software-not-payments",
+  "title": "Own the product, not the risk",
+  "ratio": "4x5",
+  "totalDurationSec": 18,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 18,
+      "captions": [
+        {
+          "text": "Payments look like a feature until you own the risk.",
+          "startSec": 0,
+          "endSec": 3.5
+        },
+        {
+          "text": "Then compliance becomes your hiring plan.",
+          "startSec": 3.9,
+          "endSec": 6.4
+        },
+        {
+          "text": "We take on the underwriting, the risk, and the rails.",
+          "startSec": 6.8,
+          "endSec": 10.7
+        },
+        {
+          "text": "You keep shipping.",
+          "startSec": 11.1,
+          "endSec": 12.6
+        }
+      ],
+      "hook": "You Sell Software, Not Payments",
+      "stat": {
+        "value": "PCI Level 1",
+        "label": "the security you inherit rather than build"
+      },
+      "supportingLine": "Card, ACH, and cash on a dedicated payments environment. Not a shared rail."
+    }
+  ]
+}

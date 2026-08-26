@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1",
+  "slug": "one-payment-experience",
+  "title": "One Payment Experience for Every Family",
+  "ratio": "4x5",
+  "totalDurationSec": 15,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 15,
+      "captions": [
+        {
+          "text": "Payment operations should not create more work.",
+          "startSec": 0,
+          "endSec": 3
+        },
+        {
+          "text": "Give families flexible ways to pay.",
+          "startSec": 3.4,
+          "endSec": 6.4
+        },
+        {
+          "text": "Keep reconciliation clear for your team.",
+          "startSec": 6.8,
+          "endSec": 9.8
+        },
+        {
+          "text": "One platform connects the experience.",
+          "startSec": 10.2,
+          "endSec": 13.2
+        }
+      ],
+      "hook": "Make Payment Operations Work For Everyone",
+      "stat": {
+        "value": "1",
+        "label": "payment experience for every family"
+      },
+      "supportingLine": "Unify cards, ACH, and flexible payment plans without adding back-office complexity."
+    }
+  ]
+}

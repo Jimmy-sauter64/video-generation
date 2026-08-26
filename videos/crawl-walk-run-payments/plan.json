@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1",
+  "slug": "crawl-walk-run-payments",
+  "title": "Grow into payments at your pace",
+  "ratio": "4x5",
+  "totalDurationSec": 18,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 18,
+      "captions": [
+        {
+          "text": "Most platforms launch payments all at once.",
+          "startSec": 0,
+          "endSec": 3.2
+        },
+        {
+          "text": "One integration, one migration, one long quarter of no features.",
+          "startSec": 3.6,
+          "endSec": 7
+        },
+        {
+          "text": "Payments can arrive in stages.",
+          "startSec": 7.4,
+          "endSec": 9.4
+        },
+        {
+          "text": "Ship the piece your customers actually need next.",
+          "startSec": 9.8,
+          "endSec": 12.6
+        },
+        {
+          "text": "The rest waits.",
+          "startSec": 13,
+          "endSec": 14.5
+        }
+      ],
+      "hook": "Payments Should Not Become Your Roadmap",
+      "stat": {
+        "value": "Crawl. Walk. Run.",
+        "label": "how partners grow into payments"
+      },
+      "supportingLine": "Add payments in stages, rather than in one launch. Embedded first. The rest when your customers ask."
+    }
+  ]
+}
