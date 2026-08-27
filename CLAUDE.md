@@ -40,9 +40,75 @@ number; never renumber existing entries.
 
 Run `bash scripts/doctor.sh` first on every new machine. Renders and `tsx` need the sandbox disabled: Revideo needs Chrome and a Vite server bind, while `tsx` needs its IPC pipe. Do not diagnose those failures as a TypeScript or plan problem until running outside the restricted sandbox.
 
+## Image & video fixing tools
+
+Local (no API credits) image and video fixers in `scripts/`. Both shell out to
+Pillow + OpenCV (images) or ffmpeg (video) — zero API calls.
+
+### fix-image.ts — still image fixes
+
+```sh
+tsx scripts/fix-image.ts <input> [output] [ops...] [--strength 0-100]
+```
+
+Operations (chainable): `denoise` `sharpen` `contrast` `upscale` `restore`
+
+- `denoise` — Non-local Means denoise (JPEG blocks, grain)
+- `sharpen` — Unsharp mask
+- `contrast` — Percentile-based auto contrast stretch
+- `upscale` — 2x Lanczos upscale
+- `restore` — denoise → contrast → sharpen (one-shot)
+
+### fix-video.ts — rendered MP4 fixes
+
+```sh
+tsx scripts/fix-video.ts <input.mp4> [output.mp4] [ops...] [--strength 0-100]
+```
+
+Operations (chainable): `sharpen` `contrast` `denoise` `brighten` `fix-overscan`
+`fix-margins` `restore`
+
+- `sharpen` — ffmpeg unsharp mask
+- `contrast` — Video eq brightness + contrast
+- `denoise` — hqdn3d temporal/spatial denoise
+- `brighten` — Gamma lift for dark frames
+- `fix-overscan` — Crop 1% to remove encoding edge artifacts
+- `fix-margins` — Crop 12% side margins (matches qa-frames.ts logic)
+- `restore` — denoise → eq → brighten → sharpen
+
 ## Deferred backlog
 
 - `listicleBeats` and `screenDemo` templates
 - Visual QA of 9:16 final frames
 - Royalty-cleared music sourcing and license records
 - A CTA field in the plan schema
+
+<!-- ASTRYX:START -->
+Astryx v0.5.0 · 163 components
+CLI: run every command as `pnpm exec astryx <cmd>` (shown below as `astryx ...`).
+
+SETUP (once, in your app entry e.g. main.tsx) — without these, components render unstyled:
+  import "@astryxdesign/core/reset.css";
+  import "@astryxdesign/core/astryx.css";
+
+WORKFLOW — discover, don't guess. Before writing UI:
+1. `astryx build "<idea>"` — START HERE: returns a kit (closest [page] + [block]s + [component]s). No args = full playbook.
+2. `astryx template <name> [--skeleton]` — scaffold the [page]/[block]s it named, or study their layout. Templates are reference code.
+3. `astryx component <Name>` — props + examples for every component you use.
+
+RULES:
+- No <div> — components do all layout/spacing, page frame included.
+- Frame first: read `astryx docs layout` before writing any page or screen — page frame, region widths, breakpoint behavior.
+- Dense data = rows (Table, List/Item), never Card-wrapped list items; Card is for standalone widgets. Status = StatusDot/Token; Badge = counts only.
+- Custom styling: component props first; else style/className with tokens — var(--color-*|--spacing-*|--radius-*). No raw hex/px. (No StyleX/Tailwind compiler here — don't use xstyle/utility classes.)
+- Tokens for every value (`astryx docs tokens`). Brand/accent belongs in the theme (`astryx theme list` / `theme add <slug>`, or `astryx theme template` for a custom one) — never override --color-* in :root.
+- SELF-CHECK before you finish: re-read the file and replace any raw <div>/<span> layout, imported .css/@apply, or hardcoded value (#hex, 16px) with the component or a token (var(--color-*|--spacing-*|…)). If unsure a component/prop exists, run `astryx component <Name>` / `astryx search "<thing>"`; don't hand-roll CSS.
+
+MORE CLI:
+  search "<query>"   find any component / hook / doc / template / block
+  component --list   163 components by category
+  template --list    page + block recipes
+  docs <topic>       browser-support, cli-integrations, color, elevation, getting-started, icons, illustrations, internationalization, layout, migration, motion, principles, shape, spacing, styling-libraries, styling, theme, tokens, typography, working-with-ai
+  swizzle <Name>     eject component source for deep customization
+  upgrade --apply    run after any @astryxdesign/core bump
+<!-- ASTRYX:END -->
