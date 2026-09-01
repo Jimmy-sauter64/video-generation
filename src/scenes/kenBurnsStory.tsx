@@ -88,13 +88,6 @@ import {
  */
 const STILL_CROSSFADE_SEC = 0.6;
 
-/**
- * Plate fills the full frame (Stripe-style) so the illustration IS the page.
- * The plate's own ground (tint/wave/gradient) becomes the scene background,
- * and white headline beats sit on a dark gradient overlay for contrast.
- */
-const PLATE_FULL_FRAME = true;
-
 /** Natural pixel dimensions of a still, probed by the render CLI. */
 export interface AssetSize {
   readonly width: number;
@@ -108,7 +101,7 @@ export interface KenBurnsStoryProps {
   /** `src` → natural size, supplied through render variables. */
   assetSizes?: Record<string, AssetSize>;
   /** Present only on a plan's final scene; the end card itself carries no CTA. */
-  endCardCta?: string;
+  endCardCta?: boolean;
 }
 
 interface Box {

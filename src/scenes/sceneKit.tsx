@@ -23,15 +23,7 @@
  * reason.
  */
 
-import {
-  Gradient,
-  Img,
-  Rect,
-  Txt,
-  brightness,
-  grayscale,
-  type Node,
-} from "@revideo/2d";
+import { Gradient, Img, Rect, Txt, type Node } from "@revideo/2d";
 import {
   createSignal,
   easeOutExpo,
@@ -53,6 +45,7 @@ import {
   typeScale,
   typeWeights,
 } from "../brand/tokens";
+import { headlineMinSizeFor, headlineSizeFor } from "../motion/textMetrics";
 
 export { loadBrandFonts } from "../brand/fonts";
 
@@ -78,10 +71,12 @@ export interface Frame {
   /** Bottom edge of the content band: 63% of height, leaving the bottom third
    * empty (L6). */
   readonly contentBottom: number;
-  /** Headline size — 8% of frame width (L4). */
+  /** Headline size — 8% of frame width (L4), raised on tall frames so small
+   * type can clear the QA cap-height floor; see `headlineSizeFor`. */
   readonly headlineSize: number;
   /** Smallest headline size the fitter may shrink to — 6% of frame width, the
-   * lowest glyph size measured across the four exemplars. */
+   * lowest glyph size measured across the four exemplars, never under the
+   * frame's small-type floor. */
   readonly headlineMinSize: number;
 }
 
@@ -97,8 +92,8 @@ export function frameFor(ratio: Ratio): Frame {
     textCenterX: -width / 2 + margins.left + textWidth / 2,
     contentTop: -height / 2 + margins.top,
     contentBottom: -height / 2 + height * contentBottomOfHeight,
-    headlineSize: Math.round(width * typeScale.headlineOfWidth),
-    headlineMinSize: Math.round(width * 0.06),
+    headlineSize: headlineSizeFor(width, height),
+    headlineMinSize: headlineMinSizeFor(width, height),
   };
 }
 
@@ -715,24 +710,23 @@ export function* runBeats(
 /**
  * The logo end card: the logomark alone, centred, no CTA, no URL (L9).
  *
- * The vendored logomark is a solid `#600075` glyph — a dark plum that is not in
- * `palette` and disappears against the purple ground. Rather than seat it on a
- * white chip (a chip is a second object competing with the mark), it is
- * neutralised and blown out to white with `grayscale` + `brightness`, which
- * preserves the glyph's alpha and produces the monochrome mark the exemplars
- * close on.
+ * The default logomark is a solid `#600075` glyph — a dark plum that is not in
+ * `palette` and disappears against the purple ground. It is drawn from the
+ * white-filled copy of the same artwork (`logos.logomarkWhiteSvg`) rather than
+ * being forced white with `grayscale` + `brightness`: a brightness blowout also
+ * saturates the glyph's anti-aliased edge pixels, which fattens the outline and
+ * fills the counter until the mark reads as a blob instead of the brand mark.
  */
 export function LogoEndCard(frame: Frame): Rect {
   const size = Math.round(frame.width * 0.23);
   return (
     <Rect x={0} y={0} width={frame.width} height={frame.height} opacity={0}>
       <Img
-        src={logos.logomarkSvg}
+        src={logos.logomarkWhiteSvg}
         width={size}
         height={Math.round(size * (296.7 / 309.9))}
         x={0}
         y={0}
-        filters={[grayscale(1), brightness(24)]}
       />
     </Rect>
   ) as Rect;

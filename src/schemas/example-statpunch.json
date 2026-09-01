@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1",
+  "slug": "payment-visibility",
+  "title": "Payment Visibility",
+  "ratio": "9x16",
+  "totalDurationSec": 10,
+  "scenes": [
+    {
+      "kind": "statPunch",
+      "durationSec": 10,
+      "captions": [],
+      "eyebrow": "One clear view",
+      "stat": {
+        "value": "100",
+        "label": "percent visibility",
+        "countFrom": 0,
+        "countTo": 100,
+        "suffix": "%"
+      },
+      "headline": "See every payment in one place",
+      "support": "Keep your payment operations clear.",
+      "icon": {
+        "icon": "chart",
+        "x": 0.2,
+        "y": -0.1,
+        "size": 120
+      }
+    }
+  ]
+}

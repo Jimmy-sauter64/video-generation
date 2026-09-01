@@ -156,12 +156,18 @@ export const motion: Motion = {
 export interface Logos {
   /** Single-color logomark (SVG), for small/compact placements. */
   readonly logomarkSvg: string;
+  /**
+   * The same logomark filled white, for placements on a deep background.
+   * Identical geometry to `logomarkSvg`; only the fill differs.
+   */
+  readonly logomarkWhiteSvg: string;
   /** Full logo lockup, 1080x1080 PNG, for large/hero placements. */
   readonly logo1080Png: string;
 }
 
 export const logos: Logos = {
   logomarkSvg: "assets/brand/pay-theory-logomark.svg",
+  logomarkWhiteSvg: "assets/brand/pay-theory-logomark-white.svg",
   logo1080Png: "assets/brand/pay-theory-logo-1080.png",
 };
 

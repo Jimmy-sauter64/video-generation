@@ -16,8 +16,8 @@
         },
         {
           "text": "And the data. And the relationship.",
-          "startSec": 8.0,
-          "endSec": 12.0
+          "startSec": 8,
+          "endSec": 12
         },
         {
           "text": "Embed payments. Keep it all in-platform.",
@@ -36,8 +36,8 @@
           "icon": "arrowUp",
           "x": 0.38,
           "y": -0.22,
-          "startSec": 1.0,
-          "endSec": 7.0,
+          "startSec": 1,
+          "endSec": 4.4,
           "size": 80
         },
         {
@@ -45,23 +45,23 @@
           "x": -0.36,
           "y": 0.05,
           "startSec": 4.5,
-          "endSec": 11.0,
+          "endSec": 8,
           "size": 90
         },
         {
           "icon": "shield",
           "x": 0.36,
           "y": 0.18,
-          "startSec": 8.5,
-          "endSec": 14.5,
+          "startSec": 8.1,
+          "endSec": 11.5,
           "size": 85
         },
         {
           "icon": "chart",
           "x": -0.38,
           "y": 0.25,
-          "startSec": 12.0,
-          "endSec": 18.0,
+          "startSec": 11.6,
+          "endSec": 15,
           "size": 88
         }
       ]

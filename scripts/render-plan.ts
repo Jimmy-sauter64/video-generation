@@ -99,12 +99,16 @@ function findMusic(musicDir: string): string | undefined {
   return track ? resolve(musicDir, track) : undefined;
 }
 function writeCaptionStub(plan: Plan, outDir: string): void {
-  const captions = plan.scenes.flatMap((scene) => [
-    ...scene.captions.map((caption) => caption.text),
-    ...(scene.kind === "kenBurnsStory"
-      ? scene.stills.map((still) => still.caption)
-      : []),
-  ]);
+  const captions = plan.scenes.flatMap((scene) => {
+    const sceneCaptions = scene.captions.map((caption) => caption.text);
+    if (scene.kind === "kenBurnsStory")
+      return [...sceneCaptions, ...scene.stills.map((still) => still.caption)];
+    if (scene.kind === "typeBeats")
+      return [...sceneCaptions, ...scene.beats.map((beat) => beat.headline)];
+    if (scene.kind === "statPunch")
+      return [...sceneCaptions, scene.headline];
+    return sceneCaptions;
+  });
   writeFileSync(
     resolve(outDir, "caption.txt"),
     `REVIEW BEFORE POSTING (run paytheory-voice)\n\n${plan.title}\n\nLinkedIn-post draft:\n${captions.map((text) => `- ${text}`).join("\n")}\n`,

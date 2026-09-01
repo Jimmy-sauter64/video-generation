@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1",
+  "slug": "payments-in-motion",
+  "title": "Payments In Motion",
+  "ratio": "4x5",
+  "totalDurationSec": 12,
+  "scenes": [
+    {
+      "kind": "typeBeats",
+      "durationSec": 12,
+      "captions": [],
+      "eyebrow": "Payment operations",
+      "beats": [
+        {
+          "headline": "Families get more ways to pay",
+          "holdSec": 3
+        },
+        {
+          "headline": "Teams reconcile every dollar clearly",
+          "holdSec": 3
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ Zero of the four moves text in space: no slide, scale, spring, bounce, or per-wo
 cross-fades in place. Fade IN **0.60–0.80s ease-out** (v3 measured 5%→28%→56%→72%→86%→98%→100%
 over 0.75s); fade OUT **0.30–0.40s ease-in**, always ~half the in-duration. Implement as
 `opacity` only: `cubic-bezier(0.16,1,0.3,1)` in, `cubic-bezier(0.7,0,0.84,0)` out.
+(Superseded 2026-08-31 by R-1 through R-5: the fresh motion system introduces transform-based choreography. L1 remains the record of the exemplar-derived baseline.)
 
 **L2 — Max 8 words on screen, max 4 words per line, max 4 lines.**
 Measured: v1 hook 6 words/2 lines; v3 headline 6 words/3 lines + 4-word subhead; v4 beats
@@ -117,3 +118,30 @@ at `opacity 0.68`, `Captions` pinned to `captionZone`, `hookStat` base 92px / va
 narrower margins, moving text, a persistent watermark, flat background. The exemplars win on
 restraint: fewer words, held longer, set smaller in more space, on a ground that moves so the
 type doesn't have to.
+
+## Motion laws (R-series, added 2026-08-31, fresh visual system)
+
+**R-1: Entrances combine transform and opacity, with offset timing.**
+Opacity finishes first, at about 70% of the transform duration. Entrance geometry is y +32px and
+scale 0.96 to 1, easing `cubic-bezier(0.16, 1, 0.30, 1)`. Never scale from 0, never slide more
+than 15% of frame height.
+
+**R-2: Groups stagger in and peel out faster than they entered.**
+Multi-element groups stagger their entrances (0.08s base, 0.05s tight for dense lists) and exit
+faster than they entered: 0.25s, `cubic-bezier(0.55, 0, 1, 0.45)`, y -20px, in reversed order so
+the group peels.
+
+**R-3: Beats overlap; cross-dissolves are banned.**
+An incoming beat starts when the outgoing exit is 60% complete. Full-frame cross-dissolves are
+banned: continuity comes from a persistent animated ground or a shared element.
+
+**R-4: Overshoot easing is a once-per-video payoff, schema-enforced.**
+Overshoot easing (`cubic-bezier(0.34, 1.56, 0.64, 1)`) appears at most once per video, on the
+payoff moment only. Schema enforces this.
+
+**R-5: Every scene holds still, the end card holds longest.**
+Every scene ends with at least 0.8 seconds of stillness; the end card holds 2.5 to 4 seconds.
+Zero-stillness videos read as cheap.
+
+Precedent: these derive from the Material 3, Carbon, and Atlassian motion specs, combined with
+the 2026-08-31 fresh-visual-system pass, proof piece `own-your-payments`.

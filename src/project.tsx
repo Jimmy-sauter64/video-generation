@@ -3,9 +3,14 @@ import { makeProject, useScene, waitFor } from "@revideo/core";
 
 import { fonts, palette } from "./brand/tokens";
 import type { Plan } from "./schemas/plan";
-import hookStat from "./scenes/hookStat.js";
-import kenBurnsStory, { type AssetSize } from "./scenes/kenBurnsStory.js";
-import { loadBrandFonts, type Ratio } from "./scenes/sceneKit.js";
+import { type AssetSize } from "./scenes/kenBurnsStory.js";
+import { sceneRegistry, type SceneContext } from "./scenes/registry.js";
+import {
+  DriftingGround,
+  frameFor,
+  loadBrandFonts,
+  type Ratio,
+} from "./scenes/sceneKit.js";
 
 /**
  * A plan can carry several scenes of different kinds, so the project exposes a
@@ -41,15 +46,50 @@ const planScene = makeScene2D("plan", function* (view) {
 
   const ratio = plan.ratio as Ratio;
 
-  for (const [index, scene] of plan.scenes.entries()) {
-    const isLast = index === plan.scenes.length - 1;
-    const endCardCta = isLast ? plan.title : undefined;
+  const allScenesShareGround = plan.scenes.every(
+    scene => sceneRegistry[scene.kind].sharedGround,
+  );
 
-    if (scene.kind === "hookStat") {
-      yield* hookStat({ view, scene, ratio, endCardCta });
-    } else {
-      yield* kenBurnsStory({ view, scene, ratio, assetSizes, endCardCta });
+  if (allScenesShareGround) {
+    const frame = frameFor(ratio);
+    const ground = DriftingGround(frame);
+    const layers = {
+      back: <Rect width={frame.width} height={frame.height} /> as Rect,
+      mid: <Rect width={frame.width} height={frame.height} /> as Rect,
+      fore: <Rect width={frame.width} height={frame.height} /> as Rect,
+    };
+
+    view.add(ground.node);
+    view.add(layers.back);
+    view.add(layers.mid);
+    view.add(layers.fore);
+    yield ground.run(plan.totalDurationSec);
+
+    for (const [index, scene] of plan.scenes.entries()) {
+      const context: SceneContext = {
+        frame,
+        ratio,
+        ground,
+        layers,
+        scene,
+        isLast: index === plan.scenes.length - 1,
+        assetSizes,
+      };
+      yield* sceneRegistry[scene.kind].run(context);
     }
+    return;
+  }
+
+  for (const [index, scene] of plan.scenes.entries()) {
+    const context: SceneContext = {
+      ratio,
+      layers: {back: view, mid: view, fore: view},
+      scene,
+      isLast: index === plan.scenes.length - 1,
+      assetSizes,
+    };
+
+    yield* sceneRegistry[scene.kind].run(context);
 
     view.removeChildren();
   }
