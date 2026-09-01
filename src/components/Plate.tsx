@@ -54,7 +54,6 @@ import { Circle, Path, Rect, Gradient, type Node } from "@revideo/2d";
 import {
   createSignal,
   easeOutExpo,
-  easeOutQuad,
   linear,
   waitFor,
   all,

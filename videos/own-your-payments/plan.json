@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1",
+  "slug": "own-your-payments",
+  "title": "Own your payments",
+  "ratio": "4x5",
+  "totalDurationSec": 19.5,
+  "scenes": [
+    {
+      "kind": "typeBeats",
+      "durationSec": 12,
+      "captions": [],
+      "groundMotion": "shift",
+      "pulse": true,
+      "beats": [
+        {
+          "headline": "A gateway is not a strategy",
+          "holdSec": 2.2,
+          "reveal": "word"
+        },
+        {
+          "headline": "Payments are part of the product experience",
+          "support": "Your customers feel every checkout and every refund.",
+          "holdSec": 2.3,
+          "reveal": "word",
+          "accent": { "shape": "rule", "anchor": "underHeadline" }
+        },
+        {
+          "eyebrow": "One platform",
+          "headline": "Card, ACH, and cash together",
+          "support": "Reconciliation, reporting, and merchant hierarchy built in.",
+          "holdSec": 2.3,
+          "reveal": "word",
+          "chips": ["Card", "ACH", "Cash"]
+        }
+      ]
+    },
+    {
+      "kind": "statPunch",
+      "durationSec": 7.5,
+      "captions": [],
+      "pulse": true,
+      "eyebrow": "Own your payments",
+      "stat": { "value": "PCI Level 1", "label": "in an isolated environment" },
+      "headline": "Do you own your payments experience?",
+      "support": "Move beyond plain payment processing.",
+      "accentMoment": "overshoot",
+      "icon": { "icon": "shield", "x": 0.26, "y": 0.12, "size": 140 },
+      "endStillnessSec": 0.8
+    }
+  ]
+}
