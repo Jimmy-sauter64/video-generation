@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1",
+  "slug": "own-your-payments",
+  "title": "Own Your Payments Experience",
+  "ratio": "4x5",
+  "totalDurationSec": 29,
+  "scenes": [
+    {
+      "kind": "kenBurnsStory",
+      "durationSec": 7,
+      "captions": [
+        {
+          "text": "A bolted-on payment gateway is not a payments strategy.",
+          "startSec": 0.4,
+          "endSec": 6.8
+        }
+      ],
+      "stills": [
+        {
+          "src": "videos/own-your-payments/stills/bolted-on.png",
+          "panFrom": { "x": 0, "y": 0 },
+          "panTo": { "x": 0.14, "y": 0.06 },
+          "zoomFrom": 1,
+          "zoomTo": 1.08,
+          "caption": "Bolted on"
+        }
+      ]
+    },
+    {
+      "kind": "kenBurnsStory",
+      "durationSec": 7,
+      "captions": [
+        {
+          "text": "Payments are part of the product experience.",
+          "startSec": 0.4,
+          "endSec": 6.7
+        }
+      ],
+      "stills": [
+        {
+          "src": "videos/own-your-payments/stills/embedded.png",
+          "panFrom": { "x": 0.08, "y": 0.02 },
+          "panTo": { "x": 0, "y": 0 },
+          "zoomFrom": 1.06,
+          "zoomTo": 1,
+          "caption": "Embedded"
+        }
+      ]
+    },
+    {
+      "kind": "kenBurnsStory",
+      "durationSec": 8,
+      "captions": [
+        {
+          "text": "Card, ACH, and cash.",
+          "startSec": 0.3,
+          "endSec": 2.4
+        },
+        {
+          "text": "Reconciliation, reporting, Merchant Hierarchy.",
+          "startSec": 2.6,
+          "endSec": 5
+        },
+        {
+          "text": "Your payment infrastructure shouldn't set your product roadmap.",
+          "startSec": 5.2,
+          "endSec": 7.9
+        }
+      ],
+      "stills": [
+        {
+          "src": "videos/own-your-payments/stills/rails.png",
+          "panFrom": { "x": -0.1, "y": 0.04 },
+          "panTo": { "x": 0.12, "y": 0.08 },
+          "zoomFrom": 1.04,
+          "zoomTo": 1.04,
+          "caption": "Money rails"
+        }
+      ]
+    },
+    {
+      "kind": "hookStat",
+      "durationSec": 7,
+      "captions": [],
+      "hook": "Do you own your payments experience?",
+      "stat": {
+        "value": "PCI Level 1",
+        "label": "in a unique isolated environment"
+      },
+      "supportingLine": "Move beyond plain payment processing.",
+      "icons": [
+        {
+          "icon": "shield",
+          "x": 0.34,
+          "y": -0.3,
+          "startSec": 1,
+          "endSec": 6.5,
+          "size": 110
+        }
+      ]
+    }
+  ]
+}

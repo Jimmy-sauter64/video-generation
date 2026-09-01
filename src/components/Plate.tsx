@@ -50,7 +50,7 @@
  * component composes at any size or aspect.
  */
 
-import { Circle, Path, Rect, Gradient, type Node } from "@revideo/2d";
+import { Circle, Path, Rect, Img, Gradient, type Node } from "@revideo/2d";
 import {
   createSignal,
   easeOutExpo,
@@ -67,6 +67,8 @@ import {
   GROUND_INKS,
   MAX_MOTIFS,
   MOTIF_INKS,
+  SVG_MOTIF_DIR,
+  SVG_MOTIF_FILES,
   type MotifKind,
   type PlateInk,
   type PlateParams,
@@ -137,11 +139,11 @@ function ink(token: PlateInk, alpha = 1): string {
  * Each curve below therefore reaches its extremes at an on-curve endpoint.
  */
 
-/** Rounded hull: flat deck, curved bottom, tips flaring up at the sides. */
+/** Asymmetric curled-prow hull: simple stern, prow curls up above the deck. */
 function hullPath(w: number, h: number): string {
   const x = w / 2;
   const y = h / 2;
-  return `M ${-x} ${-y} L ${x} ${-y} C ${0.44 * w} ${0.2 * h}, ${0.26 * w} ${y}, 0 ${y} C ${-0.26 * w} ${y}, ${-0.44 * w} ${0.2 * h}, ${-x} ${-y} Z`;
+  return `M ${-x} ${-y*0.35} L ${0.2*w} ${-y*0.35} C ${0.25*w} ${-y}, ${0.35*w} ${-y*0.85}, ${0.4*w} ${-y*0.3} C ${0.45*w} ${y*0.2}, ${0.3*w} ${y*0.8}, 0 ${y*0.75} C ${-0.2*w} ${y*0.65}, ${-0.45*w} ${y*0.15}, ${-x} ${-y*0.35} Z`;
 }
 
 /** Sail: straight luff on the left (against the mast), curved leech bulging right. */
@@ -293,12 +295,21 @@ function Ground(site: Site, params: PlateParams): Node {
   return group;
 }
 
+/**
+ * The plate params, passed into the factory for svgKind access.
+ * Used only by the "svg" motif case to look up which SVG file to render.
+ */
+interface FullPlateParams {
+  readonly svgKind?: string;
+}
+
 /** One motif or hero object, already positioned. `hero` switches scale/role. */
 function Motif(
   site: Site,
   kind: MotifKind,
   hero: boolean,
   order: number,
+  plateParams?: FullPlateParams,
 ): Node {
   const group = (<Rect opacity={0} />) as Rect;
   const nudgeX = site.jitter() * site.width * 0.012;
@@ -471,6 +482,27 @@ function Motif(
       );
       break;
     }
+
+    case "svg": {
+      // Render a cleaned Recraft SVG file as an <Img> at hero or motif scale.
+      const svgName = plateParams?.svgKind ?? "lighthouse";
+      const src = SVG_MOTIF_DIR + (SVG_MOTIF_FILES[svgName] ?? "lighthouse.svg");
+      // Size: hero gets ~36% of plate height, motif gets ~15%
+      const svgSize = site.height * (hero ? 0.38 : 0.15);
+      const baselineY = hero ? site.y(HERO_BASELINE - 0.19) : site.y(0.55);
+      const centreX = (hero ? site.x(0.48) : site.x(0.72)) + nudgeX;
+      const bob = drift(site, centreX, 2, 8, phase);
+      group.add(
+        <Img
+          src={src}
+          width={svgSize}
+          height={svgSize}
+          x={bob}
+          y={drift(site, baselineY, hero ? 2 : 3, hero ? 10 : 9, phase)}
+        />,
+      );
+      break;
+    }
   }
 
   group.opacity(0);
@@ -481,7 +513,7 @@ function Motif(
 /* --------------------------------------------------------------- factory */
 
 export function Plate(props: PlateProps): PlateHandle {
-  const { width, height, ground, hero, motifs, seed } = props;
+  const { width, height, ground, hero, motifs, seed, svgKind } = props;
   const clock: SimpleSignal<number> = createSignal(0);
   const next = seededStream(seed);
 
@@ -504,11 +536,11 @@ export function Plate(props: PlateProps): PlateHandle {
   // outgoing object gone, the incoming one not yet arrived.
   const motifNodes: Rect[] = [];
   for (const [index, kind] of motifs.slice(0, MAX_MOTIFS).entries()) {
-    const motif = Motif(site, kind, false, index + 1) as Rect;
+    const motif = Motif(site, kind, false, index + 1, { svgKind }) as Rect;
     node.add(motif);
     motifNodes.push(motif);
   }
-  const heroNode = Motif(site, hero, true, MAX_MOTIFS + 1) as Rect;
+  const heroNode = Motif(site, hero, true, MAX_MOTIFS + 1, { svgKind }) as Rect;
   node.add(heroNode);
   // Initial scale for the pop-in entrance: start slightly larger, then animate to 1
   heroNode.scale(ENTER_HERO_SCALE);

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 380" width="1620" height="380">
+  <rect width="100%" height="100%" fill="white" />
+  <text x="10" y="25" font-family="system-ui" font-size="14" font-weight="600" fill="#333">Hull geometry comparison (400×160 box)</text>
+  
+  <!-- Current (symmetric) -->
+  <g transform="translate(10, 10)">
+    <rect x="-200" y="-80" width="400" height="160" fill="none" stroke="#ddd" stroke-width="1" />
+    <path d="M -200 -80 L 200 -80 C 176 32, 104 80, 0 80 C -104 80, -176 32, -200 -80 Z" fill="#2B1553" opacity="0.8" />
+    <text x="0" y="98" text-anchor="middle" font-family="system-ui" font-size="11" fill="#666">Current (symmetric)</text>
+  </g>
+
+  <!-- Curled prow -->
+  <g transform="translate(410, 10)">
+    <rect x="-200" y="-80" width="400" height="160" fill="none" stroke="#ddd" stroke-width="1" />
+    <path d="M -200 -24 L 140 -24 C 180 -64, 220.00000000000003 -48, 240 -8 C 240 24, 180 64, 0 56 C -120 48, -200 12, -200 -24 Z" fill="#6C2BD9" opacity="0.8" />
+    <text x="0" y="98" text-anchor="middle" font-family="system-ui" font-size="11" fill="#666">Curled prow</text>
+  </g>
+
+  <!-- Simple curled -->
+  <g transform="translate(810, 10)">
+    <rect x="-200" y="-80" width="400" height="160" fill="none" stroke="#ddd" stroke-width="1" />
+    <path d="M -200 -20 L 100 -20 C 140 -68, 160 -48, 180 -12 C 200 20, 120 68, 0 60 C -100 52, -200 8, -200 -20 Z" fill="#C4AAF3" opacity="0.8" />
+    <text x="0" y="98" text-anchor="middle" font-family="system-ui" font-size="11" fill="#666">Simple curled</text>
+  </g>
+
+  <!-- Viking longboat -->
+  <g transform="translate(1210, 10)">
+    <rect x="-200" y="-80" width="400" height="160" fill="none" stroke="#ddd" stroke-width="1" />
+    <path d="M -200 -16 L 140 -16 C 160 -56, 200 -64, 220.00000000000003 -20 C 240 16, 160 72, 0 64 C -120 56, -220.00000000000003 8, -200 -16 Z" fill="#1E053F" opacity="0.8" />
+    <text x="0" y="98" text-anchor="middle" font-family="system-ui" font-size="11" fill="#666">Viking longboat</text>
+  </g>
+  <text x="10" y="185" font-family="system-ui" font-size="14" font-weight="600" fill="#333">Sail geometry</text>
+  <!-- Current sail -->
+  <g transform="translate(10, 190)">
+    <rect x="-200" y="-80" width="400" height="160" fill="none" stroke="#ddd" stroke-width="1" />
+    <path d="M -200 80 L -200 -80 C 40 -32, 180 24, 200 80 Z" fill="#6C2BD9" opacity="0.8" />
+    <text x="0" y="98" text-anchor="middle" font-family="system-ui" font-size="11" fill="#666">Current sail</text>
+  </g>
+</svg>

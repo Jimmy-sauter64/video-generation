@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1",
+  "slug": "smoke-factory",
+  "title": "Smoke Factory",
+  "ratio": "4x5",
+  "totalDurationSec": 10,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 10,
+      "captions": [
+        {
+          "text": "One platform connects every payment experience seamlessly.",
+          "startSec": 0,
+          "endSec": 10
+        }
+      ],
+      "hook": "Simplify Payments With One Platform",
+      "stat": {
+        "value": "1",
+        "label": "unified payment experience"
+      },
+      "supportingLine": "Unify cards, ACH, and flexible plans without added complexity."
+    }
+  ]
+}

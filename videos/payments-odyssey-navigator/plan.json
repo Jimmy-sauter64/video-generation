@@ -42,7 +42,7 @@
           "panTo": { "x": 0, "y": 0 },
           "zoomFrom": 1,
           "zoomTo": 1,
-          "caption": "The voyage starts before you pick a processor."
+          "caption": "A beacon cuts through the fog before you chart a course."
         },
         {
           "src": "assets/library/plate-odyssey-compass.plate",
@@ -53,7 +53,7 @@
           "caption": "A compass beats a map that someone else drew."
         },
         {
-          "src": "assets/library/plate-odyssey-star.plate",
+          "src": "assets/library/plate-odyssey-handshake.plate",
           "panFrom": { "x": 0, "y": 0 },
           "panTo": { "x": 0, "y": 0 },
           "zoomFrom": 1,

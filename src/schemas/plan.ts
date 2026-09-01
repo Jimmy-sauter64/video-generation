@@ -78,6 +78,25 @@ function validateCaptionTrack(
   }
 }
 
+const HOOK_STAT_ICONS = [
+  'arrowUp',
+  'shield',
+  'lock',
+  'dollar',
+  'chart',
+  'circle',
+  'diamond',
+] as const;
+
+const motionAccentSchema = z.strictObject({
+  icon: z.enum(HOOK_STAT_ICONS),
+  x: z.number().finite().min(-0.5).max(0.5),
+  y: z.number().finite().min(-0.5).max(0.5),
+  startSec: z.number().finite().nonnegative(),
+  endSec: z.number().finite().positive(),
+  size: z.number().finite().positive().max(160),
+});
+
 export const hookStatSceneSchema = z
   .strictObject({
     ...sceneFields,
@@ -94,6 +113,7 @@ export const hookStatSceneSchema = z
       .string()
       .trim()
       .min(1, 'Supporting line cannot be empty'),
+    icons: z.array(motionAccentSchema).optional(),
   })
   .superRefine(validateCaptionTrack);
 
@@ -160,6 +180,7 @@ export type AssetPath = z.infer<typeof assetPathSchema>;
 export type Caption = z.infer<typeof captionSchema>;
 export type PanPoint = z.infer<typeof panPointSchema>;
 export type HookStatScene = z.infer<typeof hookStatSceneSchema>;
+export type MotionAccent = z.infer<typeof motionAccentSchema>;
 export type KenBurnsStill = z.infer<typeof kenBurnsStillSchema>;
 export type KenBurnsStoryScene = z.infer<typeof kenBurnsStorySceneSchema>;
 export type Scene = z.infer<typeof sceneSchema>;

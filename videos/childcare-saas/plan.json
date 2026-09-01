@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1",
+  "slug": "childcare-saas",
+  "title": "Childcare SaaS Payments",
+  "ratio": "4x5",
+  "totalDurationSec": 18,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 18,
+      "captions": [
+        {
+          "text": "Every redirect costs you the transaction.",
+          "startSec": 3.8,
+          "endSec": 7.5
+        },
+        {
+          "text": "And the data. And the relationship.",
+          "startSec": 8.0,
+          "endSec": 12.0
+        },
+        {
+          "text": "Embed payments. Keep it all in-platform.",
+          "startSec": 12.5,
+          "endSec": 15.5
+        }
+      ],
+      "hook": "Your Payments TAM Is Bigger Than Your SaaS",
+      "stat": {
+        "value": "3.5x",
+        "label": "larger payments TAM"
+      },
+      "supportingLine": "Toast proved it. Every redirect loses the transaction, the data, and the relationship.",
+      "icons": [
+        {
+          "icon": "arrowUp",
+          "x": 0.38,
+          "y": -0.22,
+          "startSec": 1.0,
+          "endSec": 7.0,
+          "size": 80
+        },
+        {
+          "icon": "dollar",
+          "x": -0.36,
+          "y": 0.05,
+          "startSec": 4.5,
+          "endSec": 11.0,
+          "size": 90
+        },
+        {
+          "icon": "shield",
+          "x": 0.36,
+          "y": 0.18,
+          "startSec": 8.5,
+          "endSec": 14.5,
+          "size": 85
+        },
+        {
+          "icon": "chart",
+          "x": -0.38,
+          "y": 0.25,
+          "startSec": 12.0,
+          "endSec": 18.0,
+          "size": 88
+        }
+      ]
+    }
+  ]
+}

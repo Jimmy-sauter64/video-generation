@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1",
+  "slug": "split-funding-by-fund",
+  "title": "Money Lands Where the Ledger Expects It",
+  "ratio": "4x5",
+  "totalDurationSec": 10,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 10,
+      "captions": [
+        {
+          "text": "Built for the split from day one.",
+          "startSec": 0.5,
+          "endSec": 3.5
+        }
+      ],
+      "hook": "One Lump Sum. Four Ledgers.",
+      "stat": { "value": "4", "label": "funds a treasurer untangles by hand" },
+      "supportingLine": "Pay Theory splits funding by fund, not by district."
+    }
+  ]
+}

@@ -15,13 +15,24 @@
  *    `stat.label` as the letterspaced caps eyebrow, `stat.value` as the
  *    headline, `supportingLine` as the 0.55x subhead.
  * 4. the logo end card, on the final scene only.
+ *
+ * Optional `icons` array (v2) — small geometric motion accents that fade in,
+ * drift gently, and fade out alongside the beat track. Every icon is a line-only
+ * SVG path drawn in brand palette colours on a transparent ground; no fills, no
+ * rotations, no scale entrances (L1).
  */
 
-import { type Node } from "@revideo/2d";
-import { type ThreadGenerator } from "@revideo/core";
+import { type Node, Path, Rect } from "@revideo/2d";
+import {
+  type ThreadGenerator,
+  waitFor,
+  easeOutExpo,
+  easeOutQuad,
+  createSignal,
+} from "@revideo/core";
 
-import { motion } from "../brand/tokens";
-import type { HookStatScene } from "../schemas/plan";
+import { motion, palette } from "../brand/tokens";
+import type { HookStatScene, MotionAccent } from "../schemas/plan";
 
 import {
   Beat,
@@ -37,6 +48,96 @@ import {
 } from "./sceneKit";
 
 export const END_CARD_SEC = motion.endCardSec;
+
+/* ------------------------------------------------------------------- icons */
+
+/** SVG path data for each named motion accent. Every path fits inside a
+ *  unit square centred on the origin, so `size` scales it directly. */
+const ICON_PATHS: Record<string, string> = {
+  arrowUp:
+    "M -0.35 0.15 L 0 -0.4 L 0.35 0.15 M 0 -0.35 L 0 0.4",
+  shield:
+    "M 0 -0.4 L 0.35 -0.2 L 0.35 0.15 Q 0.1 0.4 0 0.45 Q -0.1 0.4 -0.35 0.15 L -0.35 -0.2 Z",
+  lock:
+    "M -0.22 -0.4 L -0.22 -0.12 L -0.35 -0.12 L -0.35 0.4 L 0.35 0.4 L 0.35 -0.12 L 0.22 -0.12 L 0.22 -0.4 M 0 0.08 L 0 0.24",
+  dollar:
+    "M 0 -0.42 L 0 0.42 M -0.22 -0.15 Q -0.3 -0.2 -0.3 0 Q -0.3 0.2 0.3 0.2 Q 0.32 0.2 0.32 0.32 Q 0.32 0.4 0.2 0.4 Q 0 0.4 -0.2 0.35 M 0.22 -0.35 Q 0.3 -0.38 0.3 -0.25 Q 0.3 -0.1 -0.3 -0.1 Q -0.32 -0.1 -0.32 -0.22 Q -0.32 -0.3 -0.2 -0.3 Q -0.05 -0.3 0.2 -0.25",
+  chart:
+    "M -0.38 0.42 L -0.38 -0.1 L -0.15 -0.3 L 0.1 0.1 L 0.35 -0.15 L 0.35 0.42 Z",
+  circle:
+    "M 0 -0.42 A 0.42 0.42 0 1 1 0 0.42 A 0.42 0.42 0 1 1 0 -0.42",
+  diamond:
+    "M 0 -0.42 L 0.42 0 L 0 0.42 L -0.42 0 Z",
+};
+
+function iconStroke(index: number): string {
+  const strokes = [palette.accent, palette.tint, palette.white];
+  return strokes[index % strokes.length];
+}
+
+/**
+ * Run motion accent icons for the scene's full duration. Each icon fades in
+ * at its start, drifts gently through a shallow sinusoid, and fades out at
+ * its end — all opacity-only, no scale or rotation (L1).
+ */
+function* runIcons(
+  view: Node,
+  icons: readonly MotionAccent[],
+  frameWidth: number,
+  frameHeight: number,
+): ThreadGenerator {
+  let cursorSec = 0;
+  const sorted = [...icons].sort((a, b) => a.startSec - b.startSec);
+  let drawn = 0;
+
+  for (const icon of sorted) {
+    yield* waitFor(Math.max(0, icon.startSec - cursorSec));
+    cursorSec = icon.startSec;
+
+    const pathData = ICON_PATHS[icon.icon];
+    if (!pathData) continue;
+
+    const dwell = icon.endSec - icon.startSec;
+    const fadeIn = Math.min(motion.fadeInSec * 0.5, dwell * 0.3);
+    const fadeOut = Math.min(motion.fadeOutSec * 1.2, dwell * 0.25);
+    const hold = Math.max(0, dwell - fadeIn - fadeOut);
+
+    const clock = createSignal(0);
+    const stroke = iconStroke(drawn);
+    const size = icon.size;
+    drawn += 1;
+
+    const node = (
+      <Rect x={icon.x * frameWidth} y={icon.y * frameHeight} opacity={0}>
+        <Path
+          data={pathData}
+          stroke={stroke}
+          lineWidth={Math.max(1.5, size * 0.04)}
+          lineCap="round"
+          lineJoin="round"
+          fill="transparent"
+          x={() => Math.sin(clock() * 0.7) * (size * 0.12)}
+          y={() => Math.cos(clock() * 0.55) * (size * 0.1)}
+          width={size}
+          height={size}
+        />
+      </Rect>
+    ) as Rect;
+    view.add(node);
+
+    yield node.opacity(1, fadeIn, easeOutExpo);
+    // Run the clock and hold in parallel
+    yield clock(dwell, dwell, (_t: number) => _t);
+    // The clock yield above advances time by `dwell` already, and the opacity
+    // tween started concurrently. Now hold for the remaining visible window.
+    yield* waitFor(hold);
+    yield* node.opacity(0, fadeOut, easeOutQuad);
+    node.remove();
+    cursorSec = icon.endSec;
+  }
+}
+
+/* ------------------------------------------------------------------- beats */
 
 export interface HookStatProps {
   view: Node;
@@ -98,6 +199,11 @@ export function* hookStat({
   // `yield` (not `yield*`) so the ground's clock runs alongside the beats for
   // the scene's whole duration — the drift never pauses between beats.
   yield ground.run(scene.durationSec);
+
+  // Start motion accent icons running alongside the ground (v2).
+  if (scene.icons && scene.icons.length > 0) {
+    yield runIcons(view, scene.icons, frame.width, frame.height);
+  }
 
   const isLast = Boolean(endCardCta);
   const budget = Math.max(

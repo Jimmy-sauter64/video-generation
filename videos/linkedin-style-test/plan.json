@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1",
+  "slug": "linkedin-style-test",
+  "title": "Embed Payments. Keep the Relationship.",
+  "ratio": "4x5",
+  "totalDurationSec": 15,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 3,
+      "captions": [
+        {
+          "text": "Every redirect costs you.",
+          "startSec": 0.5,
+          "endSec": 2.5
+        }
+      ],
+      "hook": "Stop Redirecting Families to Pay",
+      "stat": {
+        "value": "You lose",
+        "label": "revenue, data, relationship"
+      },
+      "supportingLine": "Embedded payments keep it all inside your platform."
+    },
+    {
+      "kind": "hookStat",
+      "durationSec": 3,
+      "captions": [
+        {
+          "text": "You lose the revenue.",
+          "startSec": 0.5,
+          "endSec": 2.5
+        }
+      ],
+      "hook": "You Lose the Revenue Too",
+      "stat": {
+        "value": "Gone",
+        "label": "with every third-party redirect"
+      },
+      "supportingLine": "Every transaction that leaves is margin you never recover."
+    },
+    {
+      "kind": "hookStat",
+      "durationSec": 3,
+      "captions": [
+        {
+          "text": "You lose the data.",
+          "startSec": 0.5,
+          "endSec": 2.5
+        }
+      ],
+      "hook": "And You Lose the Data",
+      "stat": {
+        "value": "Blind",
+        "label": "to what families actually need"
+      },
+      "supportingLine": "Third-party processors never share payment insights back."
+    },
+    {
+      "kind": "hookStat",
+      "durationSec": 3,
+      "captions": [
+        {
+          "text": "You lose the relationship.",
+          "startSec": 0.5,
+          "endSec": 2.5
+        }
+      ],
+      "hook": "The Relationship Suffers Most",
+      "stat": {
+        "value": "Trust",
+        "label": "broken at the payment step"
+      },
+      "supportingLine": "Families see your brand — then pay somewhere else."
+    },
+    {
+      "kind": "hookStat",
+      "durationSec": 3,
+      "captions": [
+        {
+          "text": "Embed payments. Keep the relationship.",
+          "startSec": 0.5,
+          "endSec": 2.5
+        }
+      ],
+      "hook": "Keep Payments Inside Your Platform",
+      "stat": {
+        "value": "Start",
+        "label": "keeping what is yours"
+      },
+      "supportingLine": "One platform. One payment experience. One relationship."
+    }
+  ]
+}

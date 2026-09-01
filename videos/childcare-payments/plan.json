@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1",
+  "slug": "childcare-payments",
+  "title": "Childcare Payments",
+  "ratio": "4x5",
+  "totalDurationSec": 10,
+  "scenes": [
+    {
+      "kind": "hookStat",
+      "durationSec": 10,
+      "captions": [
+        {
+          "text": "You lose the revenue. The data. The relationship.",
+          "startSec": 0,
+          "endSec": 10
+        }
+      ],
+      "hook": "Stop Redirecting. Keep the Revenue.",
+      "stat": {
+        "value": "3.5x",
+        "label": "larger TAM when you embed payments"
+      },
+      "supportingLine": "Families pay inside your platform. You keep the revenue, data, and relationship."
+    }
+  ]
+}

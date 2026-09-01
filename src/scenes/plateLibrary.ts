@@ -45,7 +45,7 @@ export type PlateInk = Exclude<keyof Palette, "white">;
 export type GroundKind = "flat" | "wave" | "gradient";
 
 /** The drawn motif library. Any one of these can also be the hero object. */
-export type MotifKind = "route" | "star" | "waveLines" | "boat" | "compass";
+export type MotifKind = "route" | "star" | "waveLines" | "boat" | "compass" | "svg";
 
 export interface PlateParams {
   /** Deterministic seed for jitter and drift phases (slug/id derived). */
@@ -55,6 +55,8 @@ export interface PlateParams {
   readonly hero: MotifKind;
   /** 1–4 supporting motifs; anything past the fourth is dropped. */
   readonly motifs: readonly MotifKind[];
+  /** SVG sub-kind when hero/motif is "svg". */
+  readonly svgKind?: SvgMotifKind;
 }
 
 export const GROUND_INKS = {
@@ -69,6 +71,7 @@ export const MOTIF_INKS = {
   waveLines: { line: "primary" },
   boat: { hull: "deepest", sail: "primary", mast: "deepest" },
   compass: { ring: "accent", rose: "primary" },
+  svg: { file: "primary" }, // SVG motifs self-color; this satisfies the type
 } as const satisfies Record<MotifKind, Readonly<Record<string, PlateInk>>>;
 
 /** Hard cap on supporting motifs (the spec's "1–4 flat vector motifs"). */
@@ -98,7 +101,8 @@ export const PLATE_LIBRARY: Readonly<Record<string, PlateParams>> = {
   "odyssey-ship": {
     seed: "odyssey-ship",
     ground: "wave",
-    hero: "boat",
+    hero: "svg",
+    svgKind: "sailboat",
     motifs: ["compass", "route", "star", "waveLines"],
   },
   "odyssey-compass": {
@@ -113,10 +117,33 @@ export const PLATE_LIBRARY: Readonly<Record<string, PlateParams>> = {
     hero: "star",
     motifs: ["compass", "route", "waveLines"],
   },
+  "odyssey-handshake": {
+    seed: "odyssey-handshake",
+    ground: "gradient",
+    hero: "svg",
+    svgKind: "handshake",
+    motifs: ["route", "star", "waveLines"],
+  },
 };
 
 /** Extension that marks a still `src` as a coded plate rather than a bitmap. */
 export const PLATE_REF_EXTENSION = ".plate";
+
+/** Reusable path prefix for Recraft-clean SVGs used as SVG motifs. */
+export const SVG_MOTIF_DIR = "assets/library/recraft/clean/";
+
+/** Map from svg sub-kind → file name under SVG_MOTIF_DIR. */
+export const SVG_MOTIF_FILES: Readonly<Record<string, string>> = {
+  lighthouse: "lighthouse.svg",
+  handshake: "handshake-partner-motif.svg",
+  sailboat: "sailboat-hero.svg",
+  key: "key.svg",
+  signpost: "signpost.svg",
+  coins: "coin-growth-motif.svg",
+};
+
+/** Allowed svg sub-types. */
+export type SvgMotifKind = keyof typeof SVG_MOTIF_FILES;
 
 /** Optional filename prefix, so the reference reads as a plate at a glance. */
 const PLATE_REF_PREFIX = "plate-";
