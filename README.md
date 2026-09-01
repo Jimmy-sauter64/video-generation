@@ -66,7 +66,7 @@ tsx scripts/render-plan.ts videos/<slug>/plan.json --final
 - `tsx scripts/approve.ts <slug> --revoke` deletes the approval file, putting the video back into draft-only state.
 - `--final` always renders both `4x5` and `9x16` silent files; you cannot pass `--ratio` alongside `--final`.
 - If `assets/music/` contains an MP3 or WAV file, a `--final` render also mixes that track into each ratio's output via `scripts/mix.sh`. With no music present the finals stay silent.
-- `--final` always writes `out/<slug>/caption.txt`, a LinkedIn-post draft stub built from the plan's own captions and headlines. This happens on every final render and does not depend on music being present (see `scripts/render-plan.ts:202`). Note that `CLAUDE.md` describes the caption stub as conditional on music; the code is the authority here and the stub is unconditional.
+- `--final` always writes `out/<slug>/caption.txt`, a LinkedIn-post draft stub built from the plan's own captions and headlines. This happens on every final render and does not depend on music being present (see `scripts/render-plan.ts:202`).
 
 ## 4. Repo layout
 

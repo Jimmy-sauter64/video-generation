@@ -11,7 +11,7 @@ tsx scripts/approve.ts <slug>
 tsx scripts/render-plan.ts videos/<slug>/plan.json --final
 ```
 
-`--final` renders both `4x5` and `9x16` silent files. When `assets/music/` has an MP3 or WAV, it also creates corresponding mixed finals and writes `out/<slug>/caption.txt`. Revoke approval with `tsx scripts/approve.ts <slug> --revoke`.
+`--final` renders both `4x5` and `9x16` silent files and always writes `out/<slug>/caption.txt`. When `assets/music/` has an MP3 or WAV, it additionally mixes that track into a `final-<ratio>.mp4` per ratio. The caption stub does not depend on music being present: `render-plan.ts` gates the mix on `if (music)` and the stub on `if (final)`. Revoke approval with `tsx scripts/approve.ts <slug> --revoke`.
 
 ## Contract and review gates
 
